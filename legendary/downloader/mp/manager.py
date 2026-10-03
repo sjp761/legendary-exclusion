@@ -91,10 +91,10 @@ class DLManager(Process):
         self.num_tasks_processed_since_last = 0
 
     def matches(file, excludelist):
-            for pattern in excludelist:
-                if PurePath(file).full_match(pattern):
-                    return True
-            return False
+        for pattern in excludelist:
+            if PurePath(file).full_match(pattern):
+                return True
+        return False
     
     def run_analysis(self, manifest: Manifest, old_manifest: Manifest = None,
                      patch=True, resume=True, file_prefix_filter=None,
@@ -220,7 +220,8 @@ class DLManager(Process):
         if file_exclude_configured:
             if isinstance(file_exclude_configured, str):
                 file_exclude_configured = [file_exclude_configured]
-            files_to_skip = set(i.filename for i in manifest.file_manifest_list.elements if DLManager.matches(i.filename.lower().replace('/', os.sep).replace('\\', os.sep), file_exclude_configured))
+            files_to_skip = set(i.filename for i in manifest.file_manifest_list.elements if 
+                                DLManager.matches(i.filename.lower(), file_exclude_configured))
             mc.added -= files_to_skip
             mc.changed -= files_to_skip
             mc.unchanged |= files_to_skip
