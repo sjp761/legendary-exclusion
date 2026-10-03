@@ -220,7 +220,8 @@ class DLManager(Process):
         if file_exclude_configured:
             if isinstance(file_exclude_configured, str):
                 file_exclude_configured = [file_exclude_configured]
-            files_to_skip = set(i.filename for i in manifest.file_manifest_list.elements if DLManager.matches(i.filename.lower().replace('/', os.sep).replace('\\', os.sep), file_exclude_configured))
+            files_to_skip = set(i.filename for i in manifest.file_manifest_list.elements if 
+                                DLManager.matches(i.filename.lower(), file_exclude_configured))
             mc.added -= files_to_skip
             mc.changed -= files_to_skip
             mc.unchanged |= files_to_skip
