@@ -3,16 +3,17 @@
 
 import logging
 import os
-from pathlib import PurePath
 import time
 from collections import Counter, defaultdict, deque
 from logging.handlers import QueueHandler
 from multiprocessing import Process, cpu_count
 from multiprocessing import Queue as MPQueue
 from multiprocessing.shared_memory import SharedMemory
+from pathlib import PurePath
 from queue import Empty
 from sys import exit
 from threading import Condition, Thread
+
 from legendary.downloader.mp.workers import DLWorker, FileWorker
 from legendary.models.downloading import (
     AnalysisResult,
@@ -91,10 +92,7 @@ class DLManager(Process):
         self.num_tasks_processed_since_last = 0
 
     def matches(file, excludelist):
-        for pattern in excludelist:
-            if PurePath(file).full_match(pattern):
-                return True
-        return False
+        return any(PurePath(file).full_match(pattern) for pattern in excludelist)
     
     def run_analysis(self, manifest: Manifest, old_manifest: Manifest = None,
                      patch=True, resume=True, file_prefix_filter=None,
